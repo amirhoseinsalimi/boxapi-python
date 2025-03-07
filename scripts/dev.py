@@ -12,7 +12,7 @@ def main():
     args = parser.parse_args()
 
     client = BoxApiClient(args.username, args.password)
-    output = client.get_instagram_user_info(args.insta_username)
+    output = client.instagram.get_instagram_user_info(args.insta_username)
     print(f"Output:\n{output}")
 
 
