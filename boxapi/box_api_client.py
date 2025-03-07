@@ -1,5 +1,5 @@
-from .instagram import InstagramAPIClient
-from .instagram_dm import InstagramDMClient
+from .instagram.instagram_api_client import InstagramAPIClient
+from .instagram.instagram_dm_client import InstagramDMClient
 from .constants import INSTAGRAM_BASE_URL, INSTAGRAM_DM_BASE_URL
 
 

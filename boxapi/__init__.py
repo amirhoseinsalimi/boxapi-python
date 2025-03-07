@@ -2,6 +2,6 @@
 boxapi: A Python client for the Box API.
 """
 
-from .client import BoxApiClient
+from .box_api_client import BoxApiClient
 
 __all__ = ["BoxApiClient"]

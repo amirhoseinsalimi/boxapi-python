@@ -1,4 +1,4 @@
-from .base_url_session import BaseUrlSession
+from boxapi.utils.base_url_session import BaseUrlSession
 
 
 class InstagramDMClient:
