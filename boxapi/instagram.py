@@ -1,4 +1,4 @@
-import requests
+from .base_url_session import BaseUrlSession
 
 
 class InstagramAPIClient:
@@ -7,8 +7,8 @@ class InstagramAPIClient:
     """
 
     def __init__(self, base_url: str, auth: tuple):
-        self.base_url = base_url
         self.auth = auth
+        self.request = BaseUrlSession(base_url)
 
     def get_user_info(self, username: str) -> dict:
         """
@@ -22,10 +22,10 @@ class InstagramAPIClient:
         if not username:
             raise ValueError("The 'username' parameter is required and cannot be empty.")
 
-        url = f"{self.base_url}/api/instagram/user/get_info"
+        url = "/user/get_info"
         payload = {"username": username}
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
         return response.json()
 
@@ -41,10 +41,10 @@ class InstagramAPIClient:
         if not username:
             raise ValueError("The 'username' parameter is required.")
 
-        url = f"{self.base_url}/api/instagram/user/get_web_profile_info"
+        url = "/user/get_web_profile_info"
         payload = {"username": username}
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -61,10 +61,10 @@ class InstagramAPIClient:
         if not user_id:
             raise ValueError("The 'user_id' parameter is required and must be a positive integer.")
 
-        url = f"{self.base_url}/api/instagram/user/get_info_by_id"
+        url = "/user/get_info_by_id"
         payload = {"id": user_id}
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -83,7 +83,7 @@ class InstagramAPIClient:
         if not user_id:
             raise ValueError("The 'user_id' parameter is required and must be a positive integer.")
 
-        url = f"{self.base_url}/api/instagram/user/get_media"
+        url = "/user/get_media"
         payload = {
             "id": user_id,
             "count": count
@@ -92,7 +92,7 @@ class InstagramAPIClient:
         if max_id is not None:
             payload["max_id"] = max_id
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -111,7 +111,7 @@ class InstagramAPIClient:
         if not username:
             raise ValueError("The 'username' parameter is required and cannot be empty.")
 
-        url = f"{self.base_url}/api/instagram/user/get_media_by_username"
+        url = "/user/get_media_by_username"
         payload = {
             "username": username,
             "count": count
@@ -120,7 +120,7 @@ class InstagramAPIClient:
         if max_id is not None:
             payload["max_id"] = max_id
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -141,7 +141,7 @@ class InstagramAPIClient:
         if count < 1:
             raise ValueError("The 'count' parameter must be >= 1.")
 
-        url = f"{self.base_url}/api/instagram/user/get_clips"
+        url = "/user/get_clips"
         payload = {
             "id": user_id,
             "count": count
@@ -150,7 +150,7 @@ class InstagramAPIClient:
         if max_id is not None:
             payload["max_id"] = max_id
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
         return response.json()
 
@@ -167,13 +167,13 @@ class InstagramAPIClient:
         if not user_id:
             raise ValueError("The 'user_id' parameter is required and must be a positive integer.")
 
-        url = f"{self.base_url}/api/instagram/user/get_guides"
+        url = "/user/get_guides"
         payload = {"id": user_id}
 
         if max_id is not None:
             payload["max_id"] = max_id
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -195,7 +195,7 @@ class InstagramAPIClient:
         if count < 1:
             raise ValueError("The 'count' parameter must be >= 1.")
 
-        url = f"{self.base_url}/api/instagram/user/get_tags"
+        url = "/user/get_tags"
         payload = {
             "id": user_id,
             "count": count
@@ -204,7 +204,7 @@ class InstagramAPIClient:
         if max_id is not None:
             payload["max_id"] = max_id
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -224,10 +224,9 @@ class InstagramAPIClient:
         if not user_id:
             raise ValueError("The 'user_id' parameter is required and must be a positive integer.")
         if count < 1:
-
             raise ValueError("The 'count' parameter must be >= 1.")
 
-        url = f"{self.base_url}/api/instagram/user/get_followers"
+        url = "/user/get_followers"
         payload = {
             "id": user_id,
             "count": count
@@ -239,7 +238,7 @@ class InstagramAPIClient:
         if query:
             payload["query"] = query
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -262,7 +261,7 @@ class InstagramAPIClient:
         if count < 1:
             raise ValueError("The 'count' parameter must be >= 1.")
 
-        url = f"{self.base_url}/api/instagram/user/get_following"
+        url = "/user/get_following"
         payload = {
             "id": user_id,
             "count": count
@@ -274,7 +273,7 @@ class InstagramAPIClient:
         if query:
             payload["query"] = query
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -291,12 +290,12 @@ class InstagramAPIClient:
         if not user_ids:
             raise ValueError("The 'user_ids' parameter is required and cannot be empty.")
 
-        url = f"{self.base_url}/api/instagram/user/get_stories"
+        url = "/user/get_stories"
         payload = {
             "ids": user_ids
         }
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -313,10 +312,10 @@ class InstagramAPIClient:
         if not user_id:
             raise ValueError("The 'user_id' parameter is required and must be a positive integer.")
 
-        url = f"{self.base_url}/api/instagram/user/get_highlights"
+        url = "/user/get_highlights"
         payload = {"id": user_id}
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -333,10 +332,10 @@ class InstagramAPIClient:
         if not user_id:
             raise ValueError("The 'user_id' parameter is required and must be a positive integer.")
 
-        url = f"{self.base_url}/api/instagram/user/get_live"
+        url = "/user/get_live"
         payload = {"id": user_id}
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -353,10 +352,10 @@ class InstagramAPIClient:
         if not user_id:
             raise ValueError("The 'user_id' parameter is required and must be a positive integer.")
 
-        url = f"{self.base_url}/api/instagram/user/get_similar_accounts"
+        url = "/user/get_similar_accounts"
         payload = {"id": user_id}
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -373,10 +372,10 @@ class InstagramAPIClient:
         if not query:
             raise ValueError("The 'query' parameter is required and cannot be empty.")
 
-        url = f"{self.base_url}/api/instagram/user/search"
+        url = "/user/search"
         payload = {"query": query}
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -393,10 +392,10 @@ class InstagramAPIClient:
         if not media_id:
             raise ValueError("The 'media_id' parameter is required and must be a positive integer.")
 
-        url = f"{self.base_url}/api/instagram/media/get_info"
+        url = "/media/get_info"
         payload = {"id": media_id}
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -413,10 +412,10 @@ class InstagramAPIClient:
         if not shortcode:
             raise ValueError("The 'shortcode' parameter is required and cannot be empty.")
 
-        url = f"{self.base_url}/api/instagram/media/get_info_by_shortcode"
+        url = "/media/get_info_by_shortcode"
         payload = {"shortcode": shortcode}
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -435,12 +434,12 @@ class InstagramAPIClient:
         if not media_id:
             raise ValueError("The 'media_id' parameter is required and must be a positive integer.")
 
-        url = f"{self.base_url}/api/instagram/media/get_comments"
+        url = "/media/get_comments"
         payload = {"id": media_id, "can_support_threading": can_support_threading}
         if min_id is not None:
             payload["min_id"] = min_id
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -457,10 +456,10 @@ class InstagramAPIClient:
         if not shortcode:
             raise ValueError("The 'shortcode' parameter is required and cannot be empty.")
 
-        url = f"{self.base_url}/api/instagram/media/get_likes_by_shortcode"
+        url = "/media/get_likes_by_shortcode"
         payload = {"shortcode": shortcode}
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -477,10 +476,10 @@ class InstagramAPIClient:
         if not shortcode:
             raise ValueError("The 'shortcode' parameter is required and cannot be empty.")
 
-        url = f"{self.base_url}/api/instagram/media/get_id_by_shortcode"
+        url = "/media/get_id_by_shortcode"
         payload = {"shortcode": shortcode}
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -497,10 +496,10 @@ class InstagramAPIClient:
         if not media_id:
             raise ValueError("The 'media_id' parameter is required and must be a positive integer.")
 
-        url = f"{self.base_url}/api/instagram/media/get_shortcode_by_id"
+        url = "/media/get_shortcode_by_id"
         payload = {"id": media_id}
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -517,10 +516,10 @@ class InstagramAPIClient:
         if not guide_id:
             raise ValueError("The 'guide_id' parameter is required and must be a positive integer.")
 
-        url = f"{self.base_url}/api/instagram/guide/get_info"
+        url = "/guide/get_info"
         payload = {"id": guide_id}
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -537,10 +536,10 @@ class InstagramAPIClient:
         if not location_id:
             raise ValueError("The 'location_id' parameter is required and must be a positive integer.")
 
-        url = f"{self.base_url}/api/instagram/location/get_info"
+        url = "/location/get_info"
         payload = {"id": location_id}
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -562,7 +561,7 @@ class InstagramAPIClient:
         if page < 1:
             raise ValueError("The 'page' parameter must be >= 1.")
 
-        url = f"{self.base_url}/api/instagram/location/get_media"
+        url = "/location/get_media"
         payload = {
             "id": location_id,
             "page": page
@@ -571,7 +570,7 @@ class InstagramAPIClient:
         if max_id is not None:
             payload["max_id"] = max_id
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -588,10 +587,10 @@ class InstagramAPIClient:
         if not query:
             raise ValueError("The 'query' parameter is required and cannot be empty.")
 
-        url = f"{self.base_url}/api/instagram/location/search"
+        url = "/location/search"
         payload = {"query": query}
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -608,10 +607,10 @@ class InstagramAPIClient:
         if not name:
             raise ValueError("The 'name' parameter is required and cannot be empty.")
 
-        url = f"{self.base_url}/api/instagram/hashtag/get_info"
+        url = "/hashtag/get_info"
         payload = {"name": name}
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -634,7 +633,7 @@ class InstagramAPIClient:
         if page < 1:
             raise ValueError("The 'page' parameter must be >= 1.")
 
-        url = f"{self.base_url}/api/instagram/hashtag/get_media"
+        url = "/hashtag/get_media"
         payload = {
             "name": name,
             "tab": tab,
@@ -644,7 +643,7 @@ class InstagramAPIClient:
         if max_id is not None:
             payload["max_id"] = max_id
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -661,10 +660,10 @@ class InstagramAPIClient:
         if not query:
             raise ValueError("The 'query' parameter is required and cannot be empty.")
 
-        url = f"{self.base_url}/api/instagram/hashtag/search"
+        url = "/hashtag/search"
         payload = {"query": query}
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -682,12 +681,12 @@ class InstagramAPIClient:
         if not audio_id:
             raise ValueError("The 'audio_id' parameter is required and must be a positive integer.")
 
-        url = f"{self.base_url}/api/instagram/audio/get_media"
+        url = "/audio/get_media"
         payload = {"id": audio_id}
         if max_id is not None:
             payload["max_id"] = max_id
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -704,10 +703,10 @@ class InstagramAPIClient:
         if not highlight_ids:
             raise ValueError("The 'highlight_ids' parameter must be a non-empty list of integers.")
 
-        url = f"{self.base_url}/api/instagram/highlight/get_stories"
+        url = "/highlight/get_stories"
         payload = {"ids": highlight_ids}
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -725,13 +724,13 @@ class InstagramAPIClient:
         if not comment_id:
             raise ValueError("The 'comment_id' parameter is required and must be a positive integer.")
 
-        url = f"{self.base_url}/api/instagram/comment/get_likes"
+        url = "/comment/get_likes"
         payload = {"id": comment_id}
 
         if max_id is not None:
             payload["max_id"] = max_id
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -753,7 +752,7 @@ class InstagramAPIClient:
         if not media_id:
             raise ValueError("The 'media_id' parameter is required and must be a positive integer.")
 
-        url = f"{self.base_url}/api/instagram/comment/get_replies"
+        url = "/comment/get_replies"
         payload = {
             "id": comment_id,
             "media_id": media_id
@@ -762,7 +761,7 @@ class InstagramAPIClient:
         if max_id is not None:
             payload["max_id"] = max_id
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -779,10 +778,10 @@ class InstagramAPIClient:
         if not query:
             raise ValueError("The 'query' parameter is required and cannot be empty.")
 
-        url = f"{self.base_url}/api/instagram/audio/search"
+        url = "/audio/search"
         payload = {"query": query}
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()

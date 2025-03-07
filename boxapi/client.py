@@ -1,5 +1,6 @@
 from .instagram import InstagramAPIClient
 from .instagram_dm import InstagramDMClient
+from .constants import INSTAGRAM_BASE_URL, INSTAGRAM_DM_BASE_URL
 
 
 class BoxApiClient:
@@ -7,11 +8,10 @@ class BoxApiClient:
     A client for interacting with the Box API.
     """
 
-    def __init__(self, username: str, password: str, base_url: str = "https://boxapi.ir"):
+    def __init__(self, username: str, password: str):
         self.username = username
         self.password = password
-        self.base_url = base_url
         self.auth = (self.username, self.password)
 
-        self.instagram = InstagramAPIClient(base_url=self.base_url, auth=self.auth)
-        self.instagram_dm = InstagramDMClient(base_url=self.base_url, auth=self.auth)
+        self.instagram = InstagramAPIClient(base_url=INSTAGRAM_BASE_URL, auth=self.auth)
+        self.instagram_dm = InstagramDMClient(base_url=INSTAGRAM_DM_BASE_URL, auth=self.auth)

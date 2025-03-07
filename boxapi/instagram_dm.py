@@ -1,4 +1,4 @@
-import requests
+from .base_url_session import BaseUrlSession
 
 
 class InstagramDMClient:
@@ -7,8 +7,8 @@ class InstagramDMClient:
     """
 
     def __init__(self, base_url: str, auth: tuple):
-        self.base_url = base_url
         self.auth = auth
+        self.request = BaseUrlSession(base_url)
 
     def verify_challenge(self, username: str, password: str, code: str) -> dict:
         """
@@ -28,14 +28,14 @@ class InstagramDMClient:
         if not code:
             raise ValueError("The 'code' parameter is required and cannot be empty.")
 
-        url = f"{self.base_url}/api/verify"
+        url = "/verify"
         payload = {
             "username": username,
             "password": password,
             "code": code
         }
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -55,13 +55,13 @@ class InstagramDMClient:
         if not password:
             raise ValueError("The 'password' parameter is required and cannot be empty.")
 
-        url = f"{self.base_url}/api/login"
+        url = "/login"
         payload = {
             "username": username,
             "password": password
         }
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -91,7 +91,7 @@ class InstagramDMClient:
         if not password:
             raise ValueError("The 'password' parameter is required and cannot be empty.")
 
-        url = f"{self.base_url}/api/direct_threads"
+        url = "/direct_threads"
         payload = {
             "username": username,
             "password": password,
@@ -100,7 +100,7 @@ class InstagramDMClient:
             "thread_message_limit": thread_message_limit
         }
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -135,7 +135,7 @@ class InstagramDMClient:
         if (not user_ids) and (not thread_ids):
             raise ValueError("You must provide at least one of 'user_ids' or 'thread_ids'.")
 
-        url = f"{self.base_url}/api/direct_send"
+        url = "/direct_send"
         payload = {
             "username": username,
             "password": password,
@@ -147,7 +147,7 @@ class InstagramDMClient:
         if thread_ids is not None:
             payload["thread_ids"] = thread_ids
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -168,14 +168,14 @@ class InstagramDMClient:
         if not password:
             raise ValueError("The 'password' parameter is required and cannot be empty.")
 
-        url = f"{self.base_url}/api/pending_inbox"
+        url = "/pending_inbox"
         payload = {
             "username": username,
             "password": password,
             "amount": amount
         }
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
         return response.json()
 
@@ -204,7 +204,7 @@ class InstagramDMClient:
         if thread_id is None:
             raise ValueError("The 'thread_id' parameter is required.")
 
-        url = f"{self.base_url}/api/direct_messages"
+        url = "/direct_messages"
         payload = {
             "username": username,
             "password": password,
@@ -212,7 +212,7 @@ class InstagramDMClient:
             "amount": amount
         }
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
         return response.json()
 
@@ -237,7 +237,7 @@ class InstagramDMClient:
         if not text:
             raise ValueError("The 'text' parameter is required and cannot be empty.")
 
-        url = f"{self.base_url}/api/direct_answer"
+        url = "/direct_answer"
         payload = {
             "username": username,
             "password": password,
@@ -245,7 +245,7 @@ class InstagramDMClient:
             "text": text
         }
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -268,14 +268,14 @@ class InstagramDMClient:
         if not query:
             raise ValueError("The 'query' parameter is required and cannot be empty.")
 
-        url = f"{self.base_url}/api/direct_search"
+        url = "/direct_search"
         payload = {
             "username": username,
             "password": password,
             "query": query
         }
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
         return response.json()
 
@@ -304,7 +304,7 @@ class InstagramDMClient:
         if not thread_id:
             raise ValueError("The 'thread_id' parameter is required and cannot be empty.")
 
-        url = f"{self.base_url}/api/direct_thread"
+        url = "/direct_thread"
         payload = {
             "username": username,
             "password": password,
@@ -312,7 +312,7 @@ class InstagramDMClient:
             "amount": amount
         }
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
@@ -335,14 +335,14 @@ class InstagramDMClient:
         if not user_ids:
             raise ValueError("The 'user_ids' parameter is required and must contain at least one user ID.")
 
-        url = f"{self.base_url}/api/direct_thread_by_participants"
+        url = "/direct_thread_by_participants"
         payload = {
             "username": username,
             "password": password,
             "user_ids": user_ids
         }
 
-        response = requests.post(url, auth=self.auth, json=payload)
+        response = self.request.post(url, auth=self.auth, json=payload)
         response.raise_for_status()
 
         return response.json()
