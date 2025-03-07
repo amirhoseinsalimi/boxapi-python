@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "boxapi"
+version = "0.1.0"
+description = "A Python client for the Box API, implementing multiple third-party APIs like Instagram."
+authors = ["Amirhosein Salimi <iamirhoseinslaimi@gmail.com>"]
+license = "MIT"
+homepage = "https://github.com/amirhoseinsalimi/boxapi-python"
+repository = "https://github.com/amirhoseinsalimi/boxapi-python"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+requests = "^2.32.3"
+
+[tool.poetry.scripts]
+boxapi-dev = "scripts.dev:main"
+
