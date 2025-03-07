@@ -11,6 +11,3 @@ repository = "https://github.com/amirhoseinsalimi/boxapi-python"
 python = "^3.8"
 requests = "^2.32.3"
 
-[tool.poetry.scripts]
-boxapi-dev = "scripts.dev:main"
-
