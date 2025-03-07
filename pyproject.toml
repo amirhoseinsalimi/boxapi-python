@@ -6,8 +6,12 @@ authors = ["Amirhosein Salimi <iamirhoseinslaimi@gmail.com>"]
 license = "MIT"
 homepage = "https://github.com/amirhoseinsalimi/boxapi-python"
 repository = "https://github.com/amirhoseinsalimi/boxapi-python"
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.8"
 requests = "^2.32.3"
 
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
