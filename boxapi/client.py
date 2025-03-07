@@ -1,4 +1,5 @@
-from .instagram import InstagramAPI
+from .instagram import InstagramAPIClient
+from .instagram_dm import InstagramDMClient
 
 
 class BoxApiClient:
@@ -12,4 +13,5 @@ class BoxApiClient:
         self.base_url = base_url
         self.auth = (self.username, self.password)
 
-        self.instagram = InstagramAPI(base_url=self.base_url, auth=self.auth)
+        self.instagram = InstagramAPIClient(base_url=self.base_url, auth=self.auth)
+        self.instagram_dm = InstagramDMClient(base_url=self.base_url, auth=self.auth)

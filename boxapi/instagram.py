@@ -1,7 +1,7 @@
 import requests
 
 
-class InstagramAPI:
+class InstagramAPIClient:
     """
     A sub-client to handle Instagram-related API calls.
     """
