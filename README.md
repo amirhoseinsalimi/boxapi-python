@@ -40,27 +40,6 @@ pip install boxapi
 poetry add boxapi
 ```
 
-## Project Structure
-
-```
-boxapi-python/
-├── boxapi/
-│   ├── __init__.py              # Package initializer, re-exports public API
-│   ├── constants.py             # Global constants and endpoint paths
-│   ├── client.py                # BoxApiClient: top-level client for Box API
-│   ├── instagram/
-│   │   ├── __init__.py          # Makes the instagram module importable
-│   │   ├── api_client.py        # InstagramAPIClient: general Instagram endpoints
-│   │   └── dm_client.py         # InstagramDMClient: direct message endpoints
-│   └── utils/
-│       └── base_url_session.py  # Custom session with base URL support
-├── examples/                    # Example scripts demonstrating usage
-├── tests/                       # (Optional) Unit tests
-├── pyproject.toml               # Build configuration for Poetry
-├── LICENSE                      # License file
-└── README.md                    # This file
-```
-
 ## Usage
 
 ### General Instagram API
@@ -96,10 +75,6 @@ print(login_response)
 ## Examples
 
 Check out the [examples](./examples) folder for complete scripts demonstrating how to use the different features of this library (It's a work in progress).
-
-## Contributing
-
-Contributions are welcome! Feel free to fork the repository and submit pull requests. Please review our [contributing guidelines](CONTRIBUTING.md) for more information.
 
 ## License
 
