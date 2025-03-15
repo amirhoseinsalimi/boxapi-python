@@ -8,6 +8,6 @@ password = os.environ.get("BOXAPI_PASSWORD")
 
 box_client = BoxApiClient(username, password)
 
-response = box_client.instagram.get_user_info("leomessi")
+response = box_client.instagram.get_media_by_username("leomessi")
 
 print(json.dumps(response, indent=4, ensure_ascii=False))
