@@ -2,8 +2,9 @@
 
 A Python client for interacting with the [Box API](https://boxapi.ir) for Instagram. This library wraps multiple Instagram endpoints including user information, media retrieval, and direct messages, allowing you to easily integrate Instagram functionality into your Python applications.
 
-> **Disclaimer**  
-> This project is currently in a **developer preview** state and may not be ready for production use. A stable version is expected to be released within the next couple of weeks. Use at your own risk and feel free to report any issues you encounter.
+> **Note**  
+> I have not been able to test the DM API. Please make sure to test your implementation thoroughly before using it in 
+> production. If you encounter any issues, feel free to open an issue or submit a pull request.
 
 ## Table of Contents
 
