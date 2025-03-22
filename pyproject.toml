@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "boxapi"
-version = "0.1.0"
+version = "1.0.1"
 description = "Python client for https://boxapi.ir to crawl and read Instagram data."
 authors = ["Amir Hosein Salimi <iamirhoseinslaimi@gmail.com>"]
 license = "MIT"
@@ -9,8 +9,13 @@ repository = "https://github.com/amirhoseinsalimi/boxapi-python"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 requests = "^2.32.3"
+
+[tool.poetry.group.dev.dependencies]
+docutils = "^0.21.2"
+twine = "^6.1.0"
+packaging = "^24.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
