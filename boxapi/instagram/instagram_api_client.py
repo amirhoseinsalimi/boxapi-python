@@ -1,4 +1,7 @@
+from typing import Any, Dict, Tuple, Optional, List
+
 from boxapi.utils.base_url_session import BaseUrlSession
+from boxapi.utils.decorators import post_request
 
 
 class InstagramAPIClient:
@@ -10,7 +13,8 @@ class InstagramAPIClient:
         self.auth = auth
         self.request = BaseUrlSession(base_url)
 
-    def get_user_info(self, username: str) -> dict:
+    @post_request
+    def get_user_info(self, username: str) -> Tuple[str, Dict[str, Any]]:
         """
         Retrieve Instagram user information using the Box API.
 
@@ -24,12 +28,10 @@ class InstagramAPIClient:
 
         url = "/user/get_info"
         payload = {"username": username}
+        return url, payload
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
-        return response.json()
-
-    def get_web_profile_info(self, username: str) -> dict:
+    @post_request
+    def get_web_profile_info(self, username: str) -> Tuple[str, Dict[str, Any]]:
         """
         Retrieve Instagram web profile information via the Box API.
 
@@ -43,13 +45,10 @@ class InstagramAPIClient:
 
         url = "/user/get_web_profile_info"
         payload = {"username": username}
+        return url, payload
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
-
-        return response.json()
-
-    def get_info_by_id(self, user_id: int) -> dict:
+    @post_request
+    def get_info_by_id(self, user_id: int) -> Tuple[str, Dict[str, Any]]:
         """
         Retrieve Instagram user information by ID via the Box API.
 
@@ -63,13 +62,10 @@ class InstagramAPIClient:
 
         url = "/user/get_info_by_id"
         payload = {"id": user_id}
+        return url, payload
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
-
-        return response.json()
-
-    def get_media(self, user_id: int, count: int = 12, max_id: str = None) -> dict:
+    @post_request
+    def get_media(self, user_id: int, count: int = 12, max_id: Optional[str] = None) -> Tuple[str, Dict[str, Any]]:
         """
         Retrieve a list of Instagram media by user ID via the Box API.
 
@@ -84,7 +80,7 @@ class InstagramAPIClient:
             raise ValueError("The 'user_id' parameter is required and must be a positive integer.")
 
         url = "/user/get_media"
-        payload = {
+        payload: Dict[str, Any] = {
             "id": user_id,
             "count": count
         }
@@ -92,12 +88,11 @@ class InstagramAPIClient:
         if max_id is not None:
             payload["max_id"] = max_id
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_media_by_username(self, username: str, count: int = 12, max_id: str = None) -> dict:
+    @post_request
+    def get_media_by_username(self, username: str, count: int = 12, max_id: Optional[str] = None) -> Tuple[
+        str, Dict[str, Any]]:
         """
         Retrieve a list of Instagram media by username via the Box API.
 
@@ -112,7 +107,7 @@ class InstagramAPIClient:
             raise ValueError("The 'username' parameter is required and cannot be empty.")
 
         url = "/user/get_media_by_username"
-        payload = {
+        payload: Dict[str, Any] = {
             "username": username,
             "count": count
         }
@@ -120,12 +115,10 @@ class InstagramAPIClient:
         if max_id is not None:
             payload["max_id"] = max_id
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_clips(self, user_id: int, count: int = 12, max_id: str = None) -> dict:
+    @post_request
+    def get_clips(self, user_id: int, count: int = 12, max_id: Optional[str] = None) -> Tuple[str, Dict[str, Any]]:
         """
         Retrieve a list of Instagram reels (Clips) by user ID via the Box API.
 
@@ -134,6 +127,7 @@ class InstagramAPIClient:
         :param max_id: Used for pagination; pass the last media ID from a previous call.
         :return: JSON response as a dictionary.
         :raises ValueError: If 'user_id' is not provided or invalid.
+        :raises ValueError: If 'count' is less than 1.
         :raises requests.exceptions.HTTPError: If the HTTP request fails.
         """
         if not user_id:
@@ -142,7 +136,7 @@ class InstagramAPIClient:
             raise ValueError("The 'count' parameter must be >= 1.")
 
         url = "/user/get_clips"
-        payload = {
+        payload: Dict[str, Any] = {
             "id": user_id,
             "count": count
         }
@@ -150,11 +144,10 @@ class InstagramAPIClient:
         if max_id is not None:
             payload["max_id"] = max_id
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
-        return response.json()
+        return url, payload
 
-    def get_guides(self, user_id: int, max_id: str = None) -> dict:
+    @post_request
+    def get_guides(self, user_id: int, max_id: Optional[str] = None) -> Tuple[str, Dict[str, Any]]:
         """
         Retrieve Instagram Guides for a user by ID via the Box API.
 
@@ -168,17 +161,15 @@ class InstagramAPIClient:
             raise ValueError("The 'user_id' parameter is required and must be a positive integer.")
 
         url = "/user/get_guides"
-        payload = {"id": user_id}
+        payload: Dict[str, Any] = {"id": user_id}
 
         if max_id is not None:
             payload["max_id"] = max_id
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_tags(self, user_id: int, count: int = 12, max_id: str = None) -> dict:
+    @post_request
+    def get_tags(self, user_id: int, count: int = 12, max_id: Optional[str] = None) -> Tuple[str, Dict[str, Any]]:
         """
         Retrieve a list of media in which the user is tagged, via the Box API.
 
@@ -191,12 +182,11 @@ class InstagramAPIClient:
         """
         if not user_id:
             raise ValueError("The 'user_id' parameter is required and must be a positive integer.")
-
         if count < 1:
             raise ValueError("The 'count' parameter must be >= 1.")
 
         url = "/user/get_tags"
-        payload = {
+        payload: Dict[str, Any] = {
             "id": user_id,
             "count": count
         }
@@ -204,12 +194,11 @@ class InstagramAPIClient:
         if max_id is not None:
             payload["max_id"] = max_id
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_followers(self, user_id: int, count: int = 10, max_id: str = None, query: str = None) -> dict:
+    @post_request
+    def get_followers(self, user_id: int, count: int = 10, max_id: Optional[str] = None, query: Optional[str] = None) -> \
+            Tuple[str, Dict[str, Any]]:
         """
         Retrieve a list of followers for a user by ID via the Box API.
 
@@ -227,7 +216,7 @@ class InstagramAPIClient:
             raise ValueError("The 'count' parameter must be >= 1.")
 
         url = "/user/get_followers"
-        payload = {
+        payload: Dict[str, Any] = {
             "id": user_id,
             "count": count
         }
@@ -238,12 +227,11 @@ class InstagramAPIClient:
         if query:
             payload["query"] = query
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_following(self, user_id: int, count: int = 10, max_id: str = None, query: str = None) -> dict:
+    @post_request
+    def get_following(self, user_id: int, count: int = 10, max_id: Optional[str] = None, query: Optional[str] = None) -> \
+            Tuple[str, Dict[str, Any]]:
         """
         Retrieve a list of users that the given user is following, via the Box API.
 
@@ -257,12 +245,11 @@ class InstagramAPIClient:
         """
         if not user_id:
             raise ValueError("The 'user_id' parameter is required and must be a positive integer.")
-
         if count < 1:
             raise ValueError("The 'count' parameter must be >= 1.")
 
         url = "/user/get_following"
-        payload = {
+        payload: Dict[str, Any] = {
             "id": user_id,
             "count": count
         }
@@ -273,12 +260,10 @@ class InstagramAPIClient:
         if query:
             payload["query"] = query
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_stories(self, user_ids: list[int]) -> dict:
+    @post_request
+    def get_stories(self, user_ids: List[int]) -> Tuple[str, Dict[str, Any]]:
         """
         Retrieve Instagram stories for a list of user IDs via the Box API.
 
@@ -291,16 +276,12 @@ class InstagramAPIClient:
             raise ValueError("The 'user_ids' parameter is required and cannot be empty.")
 
         url = "/user/get_stories"
-        payload = {
-            "ids": user_ids
-        }
+        payload = {"ids": user_ids}
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_highlights(self, user_id: int) -> dict:
+    @post_request
+    def get_highlights(self, user_id: int) -> Tuple[str, Dict[str, Any]]:
         """
         Retrieve Instagram highlights for a user by ID via the Box API.
 
@@ -315,12 +296,10 @@ class InstagramAPIClient:
         url = "/user/get_highlights"
         payload = {"id": user_id}
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_live(self, user_id: int) -> dict:
+    @post_request
+    def get_live(self, user_id: int) -> Tuple[str, Dict[str, Any]]:
         """
         Retrieve live information for a user by ID via the Box API.
 
@@ -335,12 +314,10 @@ class InstagramAPIClient:
         url = "/user/get_live"
         payload = {"id": user_id}
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_similar_accounts(self, user_id: int) -> dict:
+    @post_request
+    def get_similar_accounts(self, user_id: int) -> Tuple[str, Dict[str, Any]]:
         """
         Retrieve similar Instagram accounts for a user by ID via the Box API.
 
@@ -355,12 +332,10 @@ class InstagramAPIClient:
         url = "/user/get_similar_accounts"
         payload = {"id": user_id}
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def search_users(self, query: str) -> dict:
+    @post_request
+    def search_users(self, query: str) -> Tuple[str, Dict[str, Any]]:
         """
         Search for Instagram users via the Box API.
 
@@ -375,12 +350,10 @@ class InstagramAPIClient:
         url = "/user/search"
         payload = {"query": query}
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_media_info(self, media_id: int) -> dict:
+    @post_request
+    def get_media_info(self, media_id: int) -> Tuple[str, Dict[str, Any]]:
         """
         Retrieve Instagram media information by media ID via the Box API.
 
@@ -395,12 +368,10 @@ class InstagramAPIClient:
         url = "/media/get_info"
         payload = {"id": media_id}
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_media_info_by_shortcode(self, shortcode: str) -> dict:
+    @post_request
+    def get_media_info_by_shortcode(self, shortcode: str) -> Tuple[str, Dict[str, Any]]:
         """
         Retrieve Instagram media information by shortcode via the Box API.
 
@@ -415,12 +386,11 @@ class InstagramAPIClient:
         url = "/media/get_info_by_shortcode"
         payload = {"shortcode": shortcode}
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_media_comments(self, media_id: int, min_id: str = None, can_support_threading: bool = True) -> dict:
+    @post_request
+    def get_media_comments(self, media_id: int, min_id: Optional[str] = None, can_support_threading: bool = True) -> \
+            Tuple[str, Dict[str, Any]]:
         """
         Retrieve comments for an Instagram media item via the Box API.
 
@@ -435,16 +405,18 @@ class InstagramAPIClient:
             raise ValueError("The 'media_id' parameter is required and must be a positive integer.")
 
         url = "/media/get_comments"
-        payload = {"id": media_id, "can_support_threading": can_support_threading}
+        payload: Dict[str, Any] = {
+            "id": media_id,
+            "can_support_threading": can_support_threading
+        }
+
         if min_id is not None:
             payload["min_id"] = min_id
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_media_likes_by_shortcode(self, shortcode: str) -> dict:
+    @post_request
+    def get_media_likes_by_shortcode(self, shortcode: str) -> Tuple[str, Dict[str, Any]]:
         """
         Retrieve the users who liked a media item (up to 1000) via the Box API.
 
@@ -459,12 +431,10 @@ class InstagramAPIClient:
         url = "/media/get_likes_by_shortcode"
         payload = {"shortcode": shortcode}
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_media_id_by_shortcode(self, shortcode: str) -> dict:
+    @post_request
+    def get_media_id_by_shortcode(self, shortcode: str) -> Tuple[str, Dict[str, Any]]:
         """
         Retrieve a media ID given its shortcode via the Box API.
 
@@ -479,12 +449,10 @@ class InstagramAPIClient:
         url = "/media/get_id_by_shortcode"
         payload = {"shortcode": shortcode}
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_media_shortcode_by_id(self, media_id: int) -> dict:
+    @post_request
+    def get_media_shortcode_by_id(self, media_id: int) -> Tuple[str, Dict[str, Any]]:
         """
         Retrieve a media shortcode given its ID via the Box API.
 
@@ -499,12 +467,10 @@ class InstagramAPIClient:
         url = "/media/get_shortcode_by_id"
         payload = {"id": media_id}
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_guide_info(self, guide_id: int) -> dict:
+    @post_request
+    def get_guide_info(self, guide_id: int) -> Tuple[str, Dict[str, Any]]:
         """
         Retrieve information about a specific Instagram guide via the Box API.
 
@@ -519,12 +485,10 @@ class InstagramAPIClient:
         url = "/guide/get_info"
         payload = {"id": guide_id}
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_location_info(self, location_id: int) -> dict:
+    @post_request
+    def get_location_info(self, location_id: int) -> Tuple[str, Dict[str, Any]]:
         """
         Retrieve information about a specific Instagram location via the Box API.
 
@@ -539,12 +503,11 @@ class InstagramAPIClient:
         url = "/location/get_info"
         payload = {"id": location_id}
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_location_media(self, location_id: int, page: int = 1, max_id: str = None) -> dict:
+    @post_request
+    def get_location_media(self, location_id: int, page: int = 1, max_id: Optional[str] = None) -> Tuple[
+        str, Dict[str, Any]]:
         """
         Retrieve media associated with a specific Instagram location via the Box API.
 
@@ -562,7 +525,7 @@ class InstagramAPIClient:
             raise ValueError("The 'page' parameter must be >= 1.")
 
         url = "/location/get_media"
-        payload = {
+        payload: Dict[str, Any] = {
             "id": location_id,
             "page": page
         }
@@ -570,12 +533,10 @@ class InstagramAPIClient:
         if max_id is not None:
             payload["max_id"] = max_id
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def search_locations(self, query: str) -> dict:
+    @post_request
+    def search_locations(self, query: str) -> Tuple[str, Dict[str, Any]]:
         """
         Search for Instagram locations via the Box API.
 
@@ -590,12 +551,10 @@ class InstagramAPIClient:
         url = "/location/search"
         payload = {"query": query}
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_hashtag_info(self, name: str) -> dict:
+    @post_request
+    def get_hashtag_info(self, name: str) -> Tuple[str, Dict[str, Any]]:
         """
         Retrieve information about a specific Instagram hashtag via the Box API.
 
@@ -610,12 +569,11 @@ class InstagramAPIClient:
         url = "/hashtag/get_info"
         payload = {"name": name}
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_hashtag_media(self, name: str, tab: str = "recent", page: int = 1, max_id: str = None) -> dict:
+    @post_request
+    def get_hashtag_media(self, name: str, tab: str = "recent", page: int = 1, max_id: Optional[str] = None) -> Tuple[
+        str, Dict[str, Any]]:
         """
         Retrieve media for a specific Instagram hashtag via the Box API.
 
@@ -634,7 +592,7 @@ class InstagramAPIClient:
             raise ValueError("The 'page' parameter must be >= 1.")
 
         url = "/hashtag/get_media"
-        payload = {
+        payload: Dict[str, Any] = {
             "name": name,
             "tab": tab,
             "page": page
@@ -643,12 +601,10 @@ class InstagramAPIClient:
         if max_id is not None:
             payload["max_id"] = max_id
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def search_hashtags(self, query: str) -> dict:
+    @post_request
+    def search_hashtags(self, query: str) -> Tuple[str, Dict[str, Any]]:
         """
         Search for Instagram hashtags via the Box API.
 
@@ -663,12 +619,10 @@ class InstagramAPIClient:
         url = "/hashtag/search"
         payload = {"query": query}
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_audio_media(self, audio_id: int, max_id: str = None) -> dict:
+    @post_request
+    def get_audio_media(self, audio_id: int, max_id: Optional[str] = None) -> Tuple[str, Dict[str, Any]]:
         """
         Retrieve media associated with a specific Instagram audio track via the Box API.
 
@@ -683,15 +637,14 @@ class InstagramAPIClient:
 
         url = "/audio/get_media"
         payload = {"id": audio_id}
+
         if max_id is not None:
             payload["max_id"] = max_id
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_highlight_stories(self, highlight_ids: list[int]) -> dict:
+    @post_request
+    def get_highlight_stories(self, highlight_ids: List[int]) -> Tuple[str, Dict[str, Any]]:
         """
         Retrieve stories for one or more Instagram highlights via the Box API.
 
@@ -706,12 +659,10 @@ class InstagramAPIClient:
         url = "/highlight/get_stories"
         payload = {"ids": highlight_ids}
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_comment_likes(self, comment_id: int, max_id: str = None) -> dict:
+    @post_request
+    def get_comment_likes(self, comment_id: int, max_id: Optional[str] = None) -> Tuple[str, Dict[str, Any]]:
         """
         Retrieve the users who liked a specific Instagram comment via the Box API.
 
@@ -730,12 +681,11 @@ class InstagramAPIClient:
         if max_id is not None:
             payload["max_id"] = max_id
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def get_comment_replies(self, comment_id: int, media_id: int, max_id: str = None) -> dict:
+    @post_request
+    def get_comment_replies(self, comment_id: int, media_id: int, max_id: Optional[str] = None) -> Tuple[
+        str, Dict[str, Any]]:
         """
         Retrieve replies for a specific Instagram comment via the Box API.
 
@@ -753,7 +703,7 @@ class InstagramAPIClient:
             raise ValueError("The 'media_id' parameter is required and must be a positive integer.")
 
         url = "/comment/get_replies"
-        payload = {
+        payload: Dict[str, Any] = {
             "id": comment_id,
             "media_id": media_id
         }
@@ -761,12 +711,10 @@ class InstagramAPIClient:
         if max_id is not None:
             payload["max_id"] = max_id
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
+        return url, payload
 
-        return response.json()
-
-    def search_audios(self, query: str) -> dict:
+    @post_request
+    def search_audios(self, query: str) -> Tuple[str, Dict[str, Any]]:
         """
         Search for Instagram audio tracks via the Box API.
 
@@ -781,7 +729,4 @@ class InstagramAPIClient:
         url = "/audio/search"
         payload = {"query": query}
 
-        response = self.request.post(url, auth=self.auth, json=payload)
-        response.raise_for_status()
-
-        return response.json()
+        return url, payload
